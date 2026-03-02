@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}SmartJob AI – Intelligent Job Recommendations{% endblock %}
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero-section text-white text-center py-5">
+  <div class="container py-4">
+    <div class="hero-badge mb-3">
+      <span class="badge bg-info text-dark px-3 py-2 rounded-pill fs-6">
+        <i class="fas fa-robot me-1"></i> Powered by Machine Learning
+      </span>
+    </div>
+    <h1 class="display-4 fw-bold mb-3">
+      Find Your <span class="text-info">Perfect Job</span><br>With AI Precision
+    </h1>
+    <p class="lead mb-4 opacity-75">
+      Upload your resume. Our hybrid ML engine analyzes your skills, experience, and career preferences<br>
+      to deliver personalized job recommendations that learn and improve with every interaction.
+    </p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+      <a href="/recommend" class="btn btn-info btn-lg px-5 fw-bold shadow">
+        <i class="fas fa-magic me-2"></i>Get Recommendations
+      </a>
+      <a href="/about" class="btn btn-outline-light btn-lg px-4">
+        <i class="fas fa-info-circle me-2"></i>How It Works
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Bar -->
+<div class="bg-white border-bottom py-3 shadow-sm">
+  <div class="container">
+    <div class="row text-center g-3">
+      <div class="col-6 col-md-3">
+        <div class="stat-item">
+          <h3 class="text-info fw-bold mb-0">{{ total_jobs }}+</h3>
+          <small class="text-muted">Job Listings</small>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-item">
+          <h3 class="text-success fw-bold mb-0">3</h3>
+          <small class="text-muted">ML Algorithms</small>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-item">
+          <h3 class="text-warning fw-bold mb-0">{{ interaction_count }}</h3>
+          <small class="text-muted">Your Interactions</small>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-item">
+          <h3 class="text-danger fw-bold mb-0">Real-time</h3>
+          <small class="text-muted">Adaptive Learning</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- How It Works -->
+<div class="container my-5">
+  <h2 class="text-center fw-bold mb-2">How SmartJob AI Works</h2>
+  <p class="text-center text-muted mb-5">A 7-module intelligent pipeline from resume to recommendation</p>
+  <div class="row g-4">
+    {% set steps = [
+      ("1", "fas fa-file-alt", "info", "Resume Parsing", "NLP extracts skills, experience, education from your PDF/DOCX resume automatically."),
+      ("2", "fas fa-vector-square", "primary", "Feature Engineering", "TF-IDF vectorization transforms text into numeric feature vectors for ML processing."),
+      ("3", "fas fa-th-large", "success", "Content-Based Filtering", "Cosine similarity matches your profile vector against all job description vectors."),
+      ("4", "fas fa-users", "warning", "Collaborative Filtering", "Finds patterns from users with similar backgrounds to discover hidden opportunities."),
+      ("5", "fas fa-blender", "danger", "Hybrid Combination", "Blends CB + CF scores with configurable weights to maximize recommendation accuracy."),
+      ("6", "fas fa-sort-amount-down", "info", "Gradient Boosting Ranker", "ML ranking model re-orders results using learned patterns from interaction history."),
+      ("7", "fas fa-sync-alt", "success", "Adaptive Learning", "Every click, save, and application updates your preference profile in real-time."),
+    ] %}
+    {% for num, icon, color, title, desc in steps %}
+    <div class="col-sm-6 col-lg-4">
+      <div class="card h-100 shadow-sm border-0 card-hover">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center mb-3">
+            <div class="step-number bg-{{ color }} text-white rounded-circle me-3">{{ num }}</div>
+            <div class="icon-circle bg-{{ color }} bg-opacity-10 rounded-circle p-2">
+              <i class="{{ icon }} text-{{ color }} fa-lg"></i>
+            </div>
+          </div>
+          <h5 class="fw-bold mb-2">{{ title }}</h5>
+          <p class="text-muted small mb-0">{{ desc }}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    <div class="col-sm-6 col-lg-4">
+      <div class="card h-100 shadow-sm border-0 card-hover border-warning">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center mb-3">
+            <div class="step-number bg-warning text-dark rounded-circle me-3">+</div>
+            <div class="icon-circle bg-warning bg-opacity-10 rounded-circle p-2">
+              <i class="fas fa-rocket text-warning fa-lg"></i>
+            </div>
+          </div>
+          <h5 class="fw-bold mb-2">Skill Gap Analysis</h5>
+          <p class="text-muted small mb-0">Identifies missing skills for target jobs and suggests curated learning resources to upskill.</p>
+          <span class="badge bg-warning text-dark mt-2">Future Enhancement Active</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Your Top Skills (if any) -->
+{% if top_skills %}
+<div class="bg-white py-4 border-top border-bottom">
+  <div class="container">
+    <h5 class="fw-bold mb-3"><i class="fas fa-star text-warning me-2"></i>Your Learned Preferences</h5>
+    <div class="d-flex flex-wrap gap-2">
+      {% for skill, weight in top_skills %}
+        <span class="badge bg-info text-dark px-3 py-2">{{ skill }} <small class="opacity-75">({{ "%.1f"|format(weight) }})</small></span>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- CTA -->
+<div class="container my-5 text-center">
+  <div class="card border-0 shadow cta-card p-5">
+    <h3 class="fw-bold text-white mb-3">Ready to find your dream job?</h3>
+    <p class="text-white opacity-75 mb-4">Upload your resume or paste your skills — get personalized recommendations in seconds.</p>
+    <a href="/recommend" class="btn btn-light btn-lg fw-bold px-5">
+      <i class="fas fa-arrow-right me-2"></i>Start Now — It's Free
+    </a>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+job_id,title,company,location,description,skills_required,experience_years,salary_range,category
+1,Python Developer,TechCorp,Bangalore,"Develop scalable Python applications, REST APIs, and microservices. Work with cloud platforms.","Python,Django,REST API,AWS,Docker",2,6-10 LPA,Software Development
+2,Data Scientist,DataMinds,Hyderabad,"Analyze large datasets, build ML models, create visualizations, and generate business insights.","Python,Machine Learning,TensorFlow,SQL,Tableau",3,8-14 LPA,Data Science
+3,Frontend Developer,WebWorks,Chennai,"Build responsive UIs using React.js and modern JavaScript. Collaborate with designers.","React,JavaScript,HTML,CSS,Git",1,4-8 LPA,Web Development
+4,Machine Learning Engineer,AIFirst,Pune,"Design and deploy ML pipelines, optimize models, and work with NLP systems.","Python,PyTorch,NLP,Scikit-learn,Kubernetes",4,12-18 LPA,AI/ML
+5,Backend Developer,ServerSide,Mumbai,"Build high-performance Java Spring Boot APIs, work with microservices architecture.","Java,Spring Boot,Microservices,MySQL,Docker",3,8-14 LPA,Software Development
+6,DevOps Engineer,CloudNet,Bengaluru,"Automate CI/CD pipelines, manage cloud infrastructure, ensure system reliability.","AWS,Jenkins,Kubernetes,Terraform,Linux",3,10-16 LPA,DevOps
+7,NLP Engineer,LangAI,Remote,"Build NLP pipelines for text classification, NER, summarization and chatbots.","Python,spaCy,BERT,Transformers,FastAPI",3,10-16 LPA,AI/ML
+8,Data Analyst,InsightCo,Delhi,"Create dashboards, run SQL queries, and analyze KPIs for business teams.","SQL,Excel,Python,Power BI,Statistics",1,4-7 LPA,Data Analytics
+9,Full Stack Developer,StackBridge,Hyderabad,"Develop end-to-end web apps using MERN stack, REST APIs and cloud deployment.","MongoDB,Express,React,Node.js,AWS",2,6-10 LPA,Web Development
+10,Cloud Architect,CloudPeak,Bangalore,"Design and implement scalable cloud solutions on AWS/Azure for enterprise clients.","AWS,Azure,Terraform,Kubernetes,Security",6,18-25 LPA,Cloud
+11,Computer Vision Engineer,VisionAI,Pune,"Develop real-time image processing and object detection models using deep learning.","Python,OpenCV,PyTorch,YOLO,CUDA",4,12-18 LPA,AI/ML
+12,Software Engineer,BuildIt,Chennai,"Develop and maintain enterprise software, write clean code, participate in agile ceremonies.","Java,Python,Git,Agile,SQL",2,5-9 LPA,Software Development
+13,Business Intelligence Developer,BIHub,Mumbai,"Build OLAP cubes, design data warehouses, and create enterprise BI reports.","SQL,SSAS,Power BI,ETL,Data Warehousing",3,8-13 LPA,Data Analytics
+14,React Native Developer,MobileFirst,Noida,"Build cross-platform mobile apps with React Native and integrate with RESTful APIs.","React Native,JavaScript,Redux,iOS,Android",2,6-10 LPA,Mobile Development
+15,AI Research Scientist,DeepMind India,Bangalore,"Conduct cutting-edge research in deep learning, publish papers, prototype new models.","Python,PyTorch,Research,Mathematics,Statistics",5,15-25 LPA,AI/ML

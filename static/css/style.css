@@ -1,0 +1,131 @@
+/* SmartJob AI – Main Stylesheet */
+
+/* ── Global ─────────────────────────────────────────────────────────────── */
+body { font-family: 'Segoe UI', system-ui, sans-serif; }
+
+/* ── Hero ────────────────────────────────────────────────────────────────── */
+.hero-section {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+}
+
+/* ── Cards ───────────────────────────────────────────────────────────────── */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12) !important;
+}
+
+.job-card {
+  transition: box-shadow 0.2s ease;
+  border-left: 4px solid transparent !important;
+}
+.job-card:hover {
+  border-left-color: #0dcaf0 !important;
+  box-shadow: 0 8px 24px rgba(13,202,240,0.15) !important;
+}
+
+.hover-shadow:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: box-shadow 0.2s;
+}
+
+/* ── CTA Card ────────────────────────────────────────────────────────────── */
+.cta-card {
+  background: linear-gradient(135deg, #0f3460, #16213e);
+}
+
+/* ── Step Numbers ────────────────────────────────────────────────────────── */
+.step-number {
+  min-width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+.icon-circle {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── Avatar ──────────────────────────────────────────────────────────────── */
+.avatar-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.profile-card {
+  border-left: 5px solid #0dcaf0 !important;
+}
+
+/* ── Match Circle ────────────────────────────────────────────────────────── */
+.match-circle { width: 90px; }
+.match-svg {
+  width: 90px;
+  height: 90px;
+  transform: rotate(-90deg);
+}
+.circle-bg {
+  fill: none;
+  stroke: #e9ecef;
+  stroke-width: 3;
+}
+.circle-fill {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.6s ease;
+}
+.circle-high  { stroke: #198754; }
+.circle-mid   { stroke: #ffc107; }
+.circle-low   { stroke: #dc3545; }
+.match-text {
+  fill: #333;
+  font-size: 8px;
+  font-weight: 700;
+  transform: rotate(90deg);
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+/* ── Upload Zone ─────────────────────────────────────────────────────────── */
+.upload-zone {
+  border: 2px dashed #0dcaf0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.upload-zone:hover { background: rgba(13,202,240,0.05); }
+
+/* ── Stat items ──────────────────────────────────────────────────────────── */
+.stat-item { padding: 0.5rem; }
+
+/* ── Skill bars ──────────────────────────────────────────────────────────── */
+.skill-bar-bg {
+  height: 8px;
+  background: #e9ecef;
+}
+.skill-bar-fill {
+  height: 8px;
+  transition: width 0.5s ease;
+}
+
+/* ── Responsive tweaks ────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hero-section { min-height: 300px; }
+  .match-circle { width: 70px; }
+  .match-svg { width: 70px; height: 70px; }
+}

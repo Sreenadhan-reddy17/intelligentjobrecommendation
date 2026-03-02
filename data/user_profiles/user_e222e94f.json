@@ -1,0 +1,39 @@
+{
+  "user_id": "user_e222e94f",
+  "skill_weights": {
+    "python": 5.5,
+    "machine learning": 3.5,
+    "tensorflow": 3.5,
+    "sql": 5.5,
+    "tableau": 3.5,
+    "java": 2.0,
+    "git": 2.0,
+    "agile": 2.0
+  },
+  "category_weights": {
+    "Data Science": 3.5,
+    "Software Development": 2.0
+  },
+  "interactions": [
+    {
+      "job_id": 2,
+      "type": "apply",
+      "weight": 3.0,
+      "timestamp": 1771573195.6465118
+    },
+    {
+      "job_id": 2,
+      "type": "click",
+      "weight": 0.5,
+      "timestamp": 1771573199.8104389
+    },
+    {
+      "job_id": 12,
+      "type": "save",
+      "weight": 2.0,
+      "timestamp": 1771573208.2194092
+    }
+  ],
+  "created_at": 1771573053.4597049,
+  "updated_at": 1771573208.2194092
+}

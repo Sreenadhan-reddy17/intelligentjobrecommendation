@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block title %}About – SmartJob AI{% endblock %}
+{% block content %}
+<div class="container my-5">
+  <div class="text-center mb-5">
+    <h2 class="fw-bold"><i class="fas fa-info-circle text-info me-2"></i>About SmartJob AI</h2>
+    <p class="text-muted">A full-stack Intelligent Job Recommendation System built as per SP301 Project Report</p>
+  </div>
+
+  <!-- Architecture -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-4">
+      <h5 class="fw-bold mb-3"><i class="fas fa-sitemap text-info me-2"></i>System Architecture</h5>
+      <div class="bg-dark text-light rounded p-4 font-monospace small">
+        <pre class="mb-0 text-light">
+User Resume / Skills Input
+        │
+        ▼
+┌─────────────────────┐
+│  Module 1           │  NLP Resume Parser (spaCy / regex)
+│  Resume Parsing     │  → Skills, Experience, Education
+└─────────┬───────────┘
+          │
+          ▼
+┌─────────────────────┐
+│  Module 2           │  TF-IDF Vectorizer (500 features, bigrams)
+│  Feature Eng.       │  → Candidate Vector + Job Matrix
+└─────────┬───────────┘
+          │
+    ┌─────┴────────┐
+    ▼              ▼
+┌──────────┐  ┌────────────┐
+│ Module 3 │  │ Module 4   │
+│ Content  │  │ Collab.    │  KNN + Matrix Factorisation
+│ Based CB │  │ Filtering  │  User-Item Interaction Matrix
+└──────┬───┘  └─────┬──────┘
+       │             │
+       └──────┬──────┘
+              ▼
+┌─────────────────────┐
+│  Module 5           │  α·CB + β·CF + γ·Overlap
+│  Hybrid Blend       │  Auto cold-start detection
+└─────────┬───────────┘
+          │
+          ▼
+┌─────────────────────┐
+│  Module 6           │  Gradient Boosting Classifier
+│  Ranking Model      │  Trained on interaction history
+└─────────┬───────────┘
+          │
+          ▼
+┌─────────────────────┐
+│  Module 7           │  Skill + Category preference weights
+│  Adaptive Learning  │  Real-time profile update
+└─────────┬───────────┘
+          │
+          ▼
+      Top-N Job Recommendations
+          │
+          ▼
+┌─────────────────────┐
+│  Module 8 (FE)      │  Skill Gap Analysis + Learning Resources
+│  Skill Gap Analyzer │  Career Readiness Score
+└─────────────────────┘
+        </pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modules table -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-4">
+      <h5 class="fw-bold mb-3"><i class="fas fa-cubes text-info me-2"></i>Modules Implemented</h5>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-dark">
+            <tr><th>#</th><th>Module</th><th>Techniques</th><th>File</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Resume Parsing</td><td>spaCy NLP, Regex, pdfplumber</td><td><code>resume_parser.py</code></td><td><span class="badge bg-success">✓ Active</span></td></tr>
+            <tr><td>2</td><td>Feature Engineering</td><td>TF-IDF (500 feats, bigrams), MinMaxScaler</td><td><code>feature_engineering.py</code></td><td><span class="badge bg-success">✓ Active</span></td></tr>
+            <tr><td>3</td><td>Content-Based Filtering</td><td>Cosine Similarity, Skill Jaccard Overlap</td><td><code>content_based.py</code></td><td><span class="badge bg-success">✓ Active</span></td></tr>
+            <tr><td>4</td><td>Collaborative Filtering</td><td>KNN, User-Item Matrix, Cosine Sim</td><td><code>collaborative.py</code></td><td><span class="badge bg-success">✓ Active</span></td></tr>
+            <tr><td>5</td><td>Hybrid Recommendation</td><td>Weighted Blend (α·CB + β·CF + γ·Overlap)</td><td><code>hybrid.py</code></td><td><span class="badge bg-success">✓ Active</span></td></tr>
+            <tr><td>6</td><td>Ranking Model</td><td>Gradient Boosting, Logistic Regression</td><td><code>ranking.py</code></td><td><span class="badge bg-success">✓ Active</span></td></tr>
+            <tr><td>7</td><td>Adaptive Learning</td><td>Interaction Tracking, Profile Update</td><td><code>adaptive_learning.py</code></td><td><span class="badge bg-success">✓ Active</span></td></tr>
+            <tr class="table-warning"><td>8</td><td>Skill Gap Analysis</td><td>Jaccard Gap, Learning Resource Map</td><td><code>skill_gap.py</code></td><td><span class="badge bg-warning text-dark">Future Enhancement</span></td></tr>
+            <tr class="table-warning"><td>9</td><td>Sentence-BERT Embeddings</td><td>all-MiniLM-L6-v2, Semantic Similarity</td><td><code>hybrid.py → sbert_similarity()</code></td><td><span class="badge bg-warning text-dark">Future Enhancement</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Future Enhancements -->
+  <div class="card border-warning border-2 shadow-sm mb-4">
+    <div class="card-header bg-warning text-dark fw-bold">
+      <i class="fas fa-rocket me-2"></i>Future Enhancements (as per report)
+    </div>
+    <div class="card-body p-4">
+      <div class="row g-3">
+        {% for title, desc in [
+          ("Real-time Job APIs", "Integrate LinkedIn, Indeed, and Naukri APIs to fetch live job listings dynamically."),
+          ("Sentence-BERT Embeddings", "Replace TF-IDF with Sentence-BERT (all-MiniLM-L6-v2) for deep semantic similarity. Code stub included in hybrid.py."),
+          ("Skill Gap Analysis", "Fully built and active — identifies missing skills and suggests learning resources. (Implemented)"),
+          ("Market Demand Prediction", "Time-series models (LSTM / Prophet) to forecast which skills will be in demand next quarter."),
+          ("Recruiter Analytics Dashboard", "Admin panel for HR to view match analytics, funnel drop-offs, and candidate fit scores."),
+          ("Deep Collaborative Filtering", "Neural Collaborative Filtering (NCF) using PyTorch for higher accuracy matrix factorization."),
+        ] %}
+        <div class="col-md-6">
+          <div class="p-3 border rounded h-100">
+            <h6 class="fw-bold text-warning"><i class="fas fa-star me-1"></i>{{ title }}</h6>
+            <p class="text-muted small mb-0">{{ desc }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Tech Stack -->
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+      <h5 class="fw-bold mb-3"><i class="fas fa-tools text-info me-2"></i>Technology Stack</h5>
+      <div class="d-flex flex-wrap gap-2">
+        {% for tech in ["Python 3.11+", "Flask 3.x", "scikit-learn", "Pandas", "NumPy", "TF-IDF", "Gradient Boosting", "Cosine Similarity", "KNN", "NLP / Regex", "pdfplumber", "python-docx", "Bootstrap 5", "Font Awesome", "JavaScript", "Git / GitHub"] %}
+          <span class="badge bg-dark fs-6 fw-normal px-3 py-2">{{ tech }}</span>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-5">
+    <a href="/recommend" class="btn btn-info btn-lg px-5">
+      <i class="fas fa-magic me-2"></i>Try the System
+    </a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% block title %}Get Recommendations – SmartJob AI{% endblock %}
+{% block content %}
+
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="text-center mb-4">
+        <h2 class="fw-bold"><i class="fas fa-magic text-info me-2"></i>Get Job Recommendations</h2>
+        <p class="text-muted">Choose how you'd like to provide your profile — our AI will do the rest.</p>
+      </div>
+
+      <!-- Tab selector -->
+      <ul class="nav nav-pills justify-content-center mb-4 gap-2" id="inputTabs">
+        <li class="nav-item">
+          <button class="nav-link active px-4" data-tab="text">
+            <i class="fas fa-keyboard me-1"></i>Paste Resume
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link px-4" data-tab="file">
+            <i class="fas fa-file-upload me-1"></i>Upload File
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link px-4" data-tab="manual">
+            <i class="fas fa-list me-1"></i>Enter Skills
+          </button>
+        </li>
+      </ul>
+
+      <div class="card shadow border-0 rounded-4">
+        <div class="card-body p-4 p-md-5">
+
+          <!-- TAB: Paste resume -->
+          <div id="tab-text">
+            <form method="POST" action="/recommend">
+              <input type="hidden" name="source" value="text" />
+              <div class="mb-4">
+                <label class="form-label fw-semibold">Paste your Resume Text</label>
+                <textarea name="resume_text" class="form-control" rows="12"
+                  placeholder="Paste your entire resume here. Include your skills, experience, education, projects, certifications...
+
+Example:
+John Smith | john@email.com | 3 years experience
+Skills: Python, Machine Learning, SQL, TensorFlow, Docker
+Education: B.Tech Computer Science
+Experience: Data Scientist at XYZ Corp – built recommendation systems..."></textarea>
+                <div class="form-text">Our NLP engine will auto-extract skills, experience years, and qualifications.</div>
+              </div>
+              <div class="mb-4">
+                <label class="form-label fw-semibold">Number of Recommendations</label>
+                <select name="top_n" class="form-select">
+                  <option value="5">Top 5</option>
+                  <option value="10" selected>Top 10</option>
+                  <option value="15">Top 15</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-info w-100 py-3 fw-bold fs-5">
+                <i class="fas fa-brain me-2"></i>Analyze & Recommend
+              </button>
+            </form>
+          </div>
+
+          <!-- TAB: Upload file -->
+          <div id="tab-file" class="d-none">
+            <form method="POST" action="/recommend" enctype="multipart/form-data">
+              <input type="hidden" name="source" value="file" />
+              <div class="mb-4">
+                <label class="form-label fw-semibold">Upload Resume File</label>
+                <div class="upload-zone rounded-3 border-2 border-dashed text-center p-5" onclick="document.getElementById('resumeFile').click()">
+                  <i class="fas fa-cloud-upload-alt fa-3x text-info mb-3"></i>
+                  <h5>Click to upload or drag & drop</h5>
+                  <p class="text-muted mb-2">PDF, DOCX, or TXT — max 5MB</p>
+                  <input type="file" name="resume" id="resumeFile" class="d-none" accept=".pdf,.docx,.txt" />
+                  <div id="fileName" class="mt-2 text-success fw-semibold"></div>
+                </div>
+              </div>
+              <div class="mb-4">
+                <label class="form-label fw-semibold">Number of Recommendations</label>
+                <select name="top_n" class="form-select">
+                  <option value="5">Top 5</option>
+                  <option value="10" selected>Top 10</option>
+                  <option value="15">Top 15</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-info w-100 py-3 fw-bold fs-5">
+                <i class="fas fa-brain me-2"></i>Analyze & Recommend
+              </button>
+            </form>
+          </div>
+
+          <!-- TAB: Manual skills -->
+          <div id="tab-manual" class="d-none">
+            <form method="POST" action="/recommend">
+              <input type="hidden" name="source" value="manual" />
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Your Name</label>
+                <input type="text" name="name" class="form-control" placeholder="e.g. Priya Sharma" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Skills (comma separated)</label>
+                <input type="text" name="skills" class="form-control"
+                  placeholder="e.g. Python, Machine Learning, SQL, Docker, React" required />
+                <div class="form-text">List all your technical skills for best results.</div>
+              </div>
+              <div class="mb-4">
+                <label class="form-label fw-semibold">Years of Experience</label>
+                <input type="number" name="experience" class="form-control" min="0" max="30" value="2" />
+              </div>
+              <div class="mb-4">
+                <label class="form-label fw-semibold">Number of Recommendations</label>
+                <select name="top_n" class="form-select">
+                  <option value="5">Top 5</option>
+                  <option value="10" selected>Top 10</option>
+                  <option value="15">Top 15</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-info w-100 py-3 fw-bold fs-5">
+                <i class="fas fa-brain me-2"></i>Get Recommendations
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Quick try example -->
+      <div class="text-center mt-4">
+        <small class="text-muted">
+          <i class="fas fa-lightbulb text-warning me-1"></i>
+          <strong>Quick Try:</strong> Use the "Enter Skills" tab and type: Python, Machine Learning, TensorFlow, SQL
+        </small>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// Tab switching
+document.querySelectorAll('[data-tab]').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('[data-tab]').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    ['text','file','manual'].forEach(t => document.getElementById('tab-' + t).classList.add('d-none'));
+    document.getElementById('tab-' + this.dataset.tab).classList.remove('d-none');
+  });
+});
+
+// File name display
+document.getElementById('resumeFile')?.addEventListener('change', function() {
+  document.getElementById('fileName').textContent = this.files[0]?.name || '';
+});
+</script>
+
+{% endblock %}

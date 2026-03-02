@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block title %}Skill Gap Analysis – SmartJob AI{% endblock %}
+{% block content %}
+
+<div class="container my-5">
+
+  <div class="text-center mb-5">
+    <h2 class="fw-bold"><i class="fas fa-chart-bar text-warning me-2"></i>Skill Gap Analysis</h2>
+    <p class="text-muted">Understand exactly where you stand for your target jobs and what to learn next.</p>
+  </div>
+
+  <!-- Overall Readiness -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100 text-center p-4">
+        <i class="fas fa-tachometer-alt fa-3x text-info mb-3"></i>
+        <h5 class="fw-bold">Overall Readiness</h5>
+        <h3 class="text-info">{{ analysis.overall_readiness }}</h3>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100 text-center p-4">
+        <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+        <h5 class="fw-bold">Your Skills</h5>
+        <h3 class="text-success">{{ analysis.candidate_skills|length }}</h3>
+        <p class="text-muted small">detected skills</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100 text-center p-4">
+        <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+        <h5 class="fw-bold">Priority Gaps</h5>
+        <h3 class="text-warning">{{ analysis.priority_missing_skills|length }}</h3>
+        <p class="text-muted small">skills to learn</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Per-Job Analysis -->
+  <h4 class="fw-bold mb-3"><i class="fas fa-briefcase text-info me-2"></i>Job-by-Job Breakdown</h4>
+  {% for job in analysis.job_gaps %}
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-4">
+      <div class="row align-items-center mb-3">
+        <div class="col">
+          <h5 class="fw-bold mb-0">{{ job.title }}</h5>
+          <span class="text-muted">{{ job.company }}</span>
+        </div>
+        <div class="col-auto">
+          <div class="d-flex align-items-center gap-2">
+            <div class="progress rounded-pill" style="width:150px; height:12px;">
+              <div class="progress-bar {% if job.match_percent >= 70 %}bg-success{% elif job.match_percent >= 45 %}bg-warning{% else %}bg-danger{% endif %} rounded-pill"
+                style="width:{{ job.match_percent }}%"></div>
+            </div>
+            <strong class="{% if job.match_percent >= 70 %}text-success{% elif job.match_percent >= 45 %}text-warning{% else %}text-danger{% endif %}">
+              {{ job.match_percent }}%
+            </strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <p class="fw-semibold text-success mb-2"><i class="fas fa-check-circle me-1"></i>Matched Skills</p>
+          <div class="d-flex flex-wrap gap-1">
+            {% for skill in job.matched_skills %}
+              <span class="badge bg-success">{{ skill }}</span>
+            {% endfor %}
+            {% if not job.matched_skills %}<span class="text-muted small">None matched</span>{% endif %}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <p class="fw-semibold text-danger mb-2"><i class="fas fa-times-circle me-1"></i>Missing Skills</p>
+          <div class="d-flex flex-wrap gap-1">
+            {% for skill in job.missing_skills %}
+              <span class="badge bg-danger">{{ skill }}</span>
+            {% endfor %}
+            {% if not job.missing_skills %}<span class="text-success small"><i class="fas fa-check me-1"></i>All skills matched!</span>{% endif %}
+          </div>
+        </div>
+      </div>
+
+      {% if job.learning_resources %}
+      <div class="mt-3 p-3 bg-light rounded">
+        <p class="fw-semibold mb-2"><i class="fas fa-graduation-cap text-primary me-1"></i>Recommended Courses</p>
+        <div class="row g-2">
+          {% for res in job.learning_resources[:3] %}
+          <div class="col-auto">
+            <a href="{{ res.url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+              <i class="fas fa-external-link-alt me-1"></i>{{ res.skill|title }} – {{ res.platform }}
+              <span class="badge bg-primary ms-1">{{ res.duration }}</span>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+
+  <!-- Priority Missing Skills -->
+  {% if analysis.priority_missing_skills %}
+  <div class="card border-warning border-2 shadow-sm mt-4">
+    <div class="card-header bg-warning text-dark fw-bold">
+      <i class="fas fa-fire me-2"></i>Top Priority Skills to Learn
+    </div>
+    <div class="card-body p-4">
+      <div class="row g-3">
+        {% for skill, count in analysis.priority_missing_skills %}
+        <div class="col-sm-6 col-md-4">
+          <div class="d-flex align-items-center gap-2 p-2 border rounded">
+            <div class="skill-bar-bg rounded-pill flex-grow-1">
+              <div class="skill-bar-fill rounded-pill bg-warning" style="width:{{ [count * 20, 100]|min }}%"></div>
+            </div>
+            <span class="fw-semibold">{{ skill }}</span>
+            <span class="badge bg-secondary">{{ count }} jobs</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- All Learning Resources -->
+  {% if analysis.top_learning_resources %}
+  <div class="card border-0 shadow-sm mt-4">
+    <div class="card-header bg-info text-dark fw-bold">
+      <i class="fas fa-book me-2"></i>Learning Resources to Bridge Your Gaps
+    </div>
+    <div class="card-body p-4">
+      <div class="row g-3">
+        {% for res in analysis.top_learning_resources %}
+        <div class="col-md-6">
+          <div class="d-flex align-items-center gap-3 p-3 border rounded hover-shadow">
+            <i class="fas fa-play-circle fa-2x text-info"></i>
+            <div class="flex-grow-1">
+              <div class="fw-semibold">{{ res.skill|title }}</div>
+              <div class="text-muted small">{{ res.platform }} · {{ res.duration }}</div>
+            </div>
+            <a href="{{ res.url }}" target="_blank" class="btn btn-sm btn-outline-info">
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="text-center mt-5">
+    <a href="/recommend" class="btn btn-info btn-lg px-5">
+      <i class="fas fa-redo me-2"></i>Get New Recommendations
+    </a>
+  </div>
+
+</div>
+{% endblock %}

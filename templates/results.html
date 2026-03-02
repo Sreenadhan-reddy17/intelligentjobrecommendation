@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% block title %}Your Recommendations – SmartJob AI{% endblock %}
+{% block content %}
+
+<div class="container my-4">
+
+  <!-- Candidate Profile Summary -->
+  <div class="card border-0 shadow-sm mb-4 profile-card">
+    <div class="card-body p-4">
+      <div class="row align-items-center">
+        <div class="col-auto">
+          <div class="avatar-circle bg-info text-white">
+            <i class="fas fa-user fa-2x"></i>
+          </div>
+        </div>
+        <div class="col">
+          <h4 class="fw-bold mb-1">{{ profile.get('name', 'Candidate') }}</h4>
+          <p class="text-muted mb-2">
+            <i class="fas fa-briefcase me-1"></i>{{ profile.get('experience_years', 0) }} years experience
+            {% if profile.get('email') %} &nbsp;|&nbsp; <i class="fas fa-envelope me-1"></i>{{ profile.email }}{% endif %}
+          </p>
+          <div class="d-flex flex-wrap gap-1">
+            {% for skill in profile.get('skills', [])[:12] %}
+              <span class="badge bg-info text-dark">{{ skill }}</span>
+            {% endfor %}
+            {% if profile.get('skills', [])|length > 12 %}
+              <span class="badge bg-secondary">+{{ profile.skills|length - 12 }} more</span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-auto d-flex gap-2">
+          <a href="/recommend" class="btn btn-outline-info btn-sm">
+            <i class="fas fa-redo me-1"></i>New Search
+          </a>
+          <a href="/skill-gap" class="btn btn-outline-warning btn-sm">
+            <i class="fas fa-chart-bar me-1"></i>Skill Gap
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Header -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="fw-bold mb-0">
+      <i class="fas fa-list-check text-info me-2"></i>
+      {{ recommendations|length }} Job Recommendations
+    </h4>
+    <small class="text-muted">Sorted by Hybrid AI Score · Click to interact</small>
+  </div>
+
+  <!-- Job Cards -->
+  {% for job in recommendations %}
+  <div class="card job-card border-0 shadow-sm mb-3" data-job-id="{{ job.job_id }}">
+    <div class="card-body p-4">
+      <div class="row align-items-start">
+        <div class="col-lg-8">
+          <!-- Title + company -->
+          <div class="d-flex align-items-start gap-2 mb-2">
+            <div>
+              <h5 class="fw-bold mb-1">{{ job.title }}</h5>
+              <p class="text-muted mb-2">
+                <i class="fas fa-building me-1"></i><strong>{{ job.company }}</strong>
+                &nbsp;|&nbsp;<i class="fas fa-map-marker-alt me-1"></i>{{ job.location }}
+                &nbsp;|&nbsp;<i class="fas fa-tag me-1"></i>{{ job.category }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <p class="text-muted small mb-3">{{ job.description }}</p>
+
+          <!-- Skills -->
+          <div class="mb-2">
+            <strong class="small">Required Skills:</strong>
+            <div class="d-flex flex-wrap gap-1 mt-1">
+              {% for skill in job.skills_required %}
+                <span class="badge {% if skill in job.matched_skills %}bg-success{% else %}bg-light text-dark border{% endif %} small">
+                  {% if skill in job.matched_skills %}<i class="fas fa-check me-1"></i>{% endif %}{{ skill }}
+                </span>
+              {% endfor %}
+            </div>
+          </div>
+
+          {% if job.missing_skills %}
+          <div class="mt-2">
+            <small class="text-muted">
+              <i class="fas fa-exclamation-circle text-warning me-1"></i>
+              Missing: {{ job.missing_skills[:4]|join(', ') }}{% if job.missing_skills|length > 4 %} +{{ job.missing_skills|length - 4 }} more{% endif %}
+            </small>
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+          <!-- Match score circle -->
+          <div class="match-circle mb-3 ms-lg-auto">
+            <svg viewBox="0 0 36 36" class="match-svg">
+              <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              <path class="circle-fill {% if job.match_percent >= 70 %}circle-high{% elif job.match_percent >= 45 %}circle-mid{% else %}circle-low{% endif %}"
+                stroke-dasharray="{{ job.match_percent }}, 100"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              <text x="18" y="20.35" class="match-text">{{ job.match_percent }}%</text>
+            </svg>
+            <div class="text-center small text-muted">Skill Match</div>
+          </div>
+
+          <!-- Meta info -->
+          <div class="text-muted small mb-3">
+            <div><i class="fas fa-rupee-sign me-1 text-success"></i>{{ job.salary_range }}</div>
+            <div><i class="fas fa-clock me-1 text-info"></i>{{ job.experience_years }}+ yrs exp</div>
+            <div><i class="fas fa-robot me-1 text-warning"></i>AI Score: {{ job.hybrid_score }}</div>
+          </div>
+
+          <!-- Action buttons -->
+          <div class="d-flex gap-2 justify-content-lg-end flex-wrap">
+            <button class="btn btn-sm btn-outline-secondary interact-btn"
+              data-job="{{ job.job_id }}" data-type="save" title="Save Job">
+              <i class="fas fa-bookmark me-1"></i>Save
+            </button>
+            <button class="btn btn-sm btn-info interact-btn"
+              data-job="{{ job.job_id }}" data-type="apply" title="Apply">
+              <i class="fas fa-paper-plane me-1"></i>Apply
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
+  {% if not recommendations %}
+  <div class="text-center py-5">
+    <i class="fas fa-search fa-4x text-muted mb-3"></i>
+    <h4 class="text-muted">No recommendations found</h4>
+    <p class="text-muted">Try adding more skills to your profile.</p>
+    <a href="/recommend" class="btn btn-info">Try Again</a>
+  </div>
+  {% endif %}
+
+  <!-- Skill Gap CTA -->
+  {% if recommendations %}
+  <div class="card border-warning mt-4 shadow-sm">
+    <div class="card-body p-4 d-flex align-items-center justify-content-between flex-wrap gap-3">
+      <div>
+        <h5 class="fw-bold text-warning mb-1"><i class="fas fa-graduation-cap me-2"></i>Want to improve your match scores?</h5>
+        <p class="text-muted mb-0 small">Run Skill Gap Analysis to discover exactly what skills to learn next and where to learn them.</p>
+      </div>
+      <a href="/skill-gap" class="btn btn-warning fw-bold px-4">
+        <i class="fas fa-chart-bar me-2"></i>Analyze Skill Gaps
+      </a>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+
+<div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index:9999"></div>
+
+<script>
+document.querySelectorAll('.interact-btn').forEach(btn => {
+  btn.addEventListener('click', async function() {
+    const jobId = this.dataset.job;
+    const itype = this.dataset.type;
+
+    // Optimistic UI
+    if (itype === 'save') {
+      this.innerHTML = '<i class="fas fa-bookmark me-1"></i>Saved!';
+      this.classList.replace('btn-outline-secondary', 'btn-secondary');
+    } else {
+      this.innerHTML = '<i class="fas fa-check me-1"></i>Applied!';
+      this.classList.replace('btn-info', 'btn-success');
+    }
+    this.disabled = true;
+
+    // Record interaction
+    const res = await fetch('/interact', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({job_id: jobId, type: itype})
+    });
+    const data = await res.json();
+
+    // Toast
+    const toast = document.createElement('div');
+    toast.className = 'toast show align-items-center text-white bg-success border-0 mb-2';
+    toast.innerHTML = `<div class="d-flex"><div class="toast-body"><i class="fas fa-check-circle me-2"></i>${data.message}</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>`;
+    document.getElementById('toast-container').appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+
+    // Also record click on card hover
+    document.querySelector(`[data-job-id="${jobId}"]`)?.addEventListener('mouseenter', () => {
+      fetch('/interact', {method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({job_id: jobId, type: 'click'})});
+    }, {once: true});
+  });
+});
+</script>
+
+{% endblock %}

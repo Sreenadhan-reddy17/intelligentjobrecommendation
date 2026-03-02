@@ -1,0 +1,41 @@
+{
+  "user_id": "user_68eccbaa",
+  "skill_weights": {
+    "react": 6.0,
+    "javascript": 6.0,
+    "html": 6.0,
+    "css": 6.0,
+    "git": 6.0
+  },
+  "category_weights": {
+    "Web Development": 6.0
+  },
+  "interactions": [
+    {
+      "job_id": 3,
+      "type": "apply",
+      "weight": 3.0,
+      "timestamp": 1771951893.1101043
+    },
+    {
+      "job_id": 3,
+      "type": "click",
+      "weight": 0.5,
+      "timestamp": 1771951900.9919267
+    },
+    {
+      "job_id": 3,
+      "type": "save",
+      "weight": 2.0,
+      "timestamp": 1771951901.7752476
+    },
+    {
+      "job_id": 3,
+      "type": "click",
+      "weight": 0.5,
+      "timestamp": 1771951904.2159166
+    }
+  ],
+  "created_at": 1771951813.7460644,
+  "updated_at": 1771951904.2159166
+}
