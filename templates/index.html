@@ -66,13 +66,19 @@
   <p class="text-center text-muted mb-5">A 7-module intelligent pipeline from resume to recommendation</p>
   <div class="row g-4">
     {% set steps = [
-      ("1", "fas fa-file-alt", "info", "Resume Parsing", "NLP extracts skills, experience, education from your PDF/DOCX resume automatically."),
-      ("2", "fas fa-vector-square", "primary", "Feature Engineering", "TF-IDF vectorization transforms text into numeric feature vectors for ML processing."),
-      ("3", "fas fa-th-large", "success", "Content-Based Filtering", "Cosine similarity matches your profile vector against all job description vectors."),
-      ("4", "fas fa-users", "warning", "Collaborative Filtering", "Finds patterns from users with similar backgrounds to discover hidden opportunities."),
-      ("5", "fas fa-blender", "danger", "Hybrid Combination", "Blends CB + CF scores with configurable weights to maximize recommendation accuracy."),
-      ("6", "fas fa-sort-amount-down", "info", "Gradient Boosting Ranker", "ML ranking model re-orders results using learned patterns from interaction history."),
-      ("7", "fas fa-sync-alt", "success", "Adaptive Learning", "Every click, save, and application updates your preference profile in real-time."),
+    ("1", "fas fa-file-alt", "info", "Resume Parsing", "NLP extracts skills, experience, education from your PDF/DOCX
+    resume automatically."),
+    ("2", "fas fa-vector-square", "primary", "Semantic Vectorization", "Sentence Transformers (BERT) encode text into dense semantic dimensions without losing context."),
+    ("3", "fas fa-th-large", "success", "Content-Based Filtering", "Cosine similarity matches your profile vector
+    against all job description vectors."),
+    ("4", "fas fa-users", "warning", "Collaborative Filtering", "Finds patterns from users with similar backgrounds to
+    discover hidden opportunities."),
+    ("5", "fas fa-blender", "danger", "Hybrid Combination", "Blends CB + CF scores with configurable weights to maximize
+    recommendation accuracy."),
+    ("6", "fas fa-sort-amount-down", "info", "Gradient Boosting Ranker", "ML ranking model re-orders results using
+    learned patterns from interaction history."),
+    ("7", "fas fa-sync-alt", "success", "Adaptive Learning", "Every click, save, and application updates your preference
+    profile in real-time."),
     ] %}
     {% for num, icon, color, title, desc in steps %}
     <div class="col-sm-6 col-lg-4">
@@ -100,7 +106,8 @@
             </div>
           </div>
           <h5 class="fw-bold mb-2">Skill Gap Analysis</h5>
-          <p class="text-muted small mb-0">Identifies missing skills for target jobs and suggests curated learning resources to upskill.</p>
+          <p class="text-muted small mb-0">Identifies missing skills for target jobs and suggests curated learning
+            resources to upskill.</p>
           <span class="badge bg-warning text-dark mt-2">Future Enhancement Active</span>
         </div>
       </div>
@@ -115,7 +122,8 @@
     <h5 class="fw-bold mb-3"><i class="fas fa-star text-warning me-2"></i>Your Learned Preferences</h5>
     <div class="d-flex flex-wrap gap-2">
       {% for skill, weight in top_skills %}
-        <span class="badge bg-info text-dark px-3 py-2">{{ skill }} <small class="opacity-75">({{ "%.1f"|format(weight) }})</small></span>
+      <span class="badge bg-info text-dark px-3 py-2">{{ skill }} <small class="opacity-75">({{ "%.1f"|format(weight)
+          }})</small></span>
       {% endfor %}
     </div>
   </div>
@@ -126,7 +134,8 @@
 <div class="container my-5 text-center">
   <div class="card border-0 shadow cta-card p-5">
     <h3 class="fw-bold text-white mb-3">Ready to find your dream job?</h3>
-    <p class="text-white opacity-75 mb-4">Upload your resume or paste your skills — get personalized recommendations in seconds.</p>
+    <p class="text-white opacity-75 mb-4">Upload your resume or paste your skills — get personalized recommendations in
+      seconds.</p>
     <a href="/recommend" class="btn btn-light btn-lg fw-bold px-5">
       <i class="fas fa-arrow-right me-2"></i>Start Now — It's Free
     </a>

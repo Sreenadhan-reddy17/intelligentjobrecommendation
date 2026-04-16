@@ -1,59 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}SmartJob AI{% endblock %}</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍💻</text></svg>">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
   <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
 </head>
+
 <body class="bg-light">
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
-  <div class="container">
-    <a class="navbar-brand fw-bold fs-4" href="/">
-      <i class="fas fa-brain me-2 text-info"></i>SmartJob<span class="text-info">AI</span>
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="nav">
-      <ul class="navbar-nav ms-auto align-items-center gap-2">
-        <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-home me-1"></i>Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="/recommend"><i class="fas fa-magic me-1"></i>Get Recommendations</a></li>
-        <li class="nav-item"><a class="nav-link" href="/skill-gap"><i class="fas fa-chart-bar me-1"></i>Skill Gap</a></li>
-        <li class="nav-item"><a class="nav-link" href="/about"><i class="fas fa-info-circle me-1"></i>About</a></li>
-      </ul>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark"
+    style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+    <div class="container">
+      <a class="navbar-brand fw-bold fs-4" href="/">
+        👨‍💻SmartJob<span class="text-info">AI</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="nav">
+        <ul class="navbar-nav ms-auto align-items-center gap-2">
+          <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-home me-1"></i>Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/recruiter"><i class="fas fa-user-tie me-1"></i>Recruiter</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="/recommend"><i class="fas fa-magic me-1"></i>Get
+              Recommendations</a></li>
+          <li class="nav-item"><a class="nav-link" href="/skill-gap"><i class="fas fa-chart-bar me-1"></i>Skill Gap</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="/about"><i class="fas fa-info-circle me-1"></i>About</a></li>
+          {% if session.get('user') %}
+            <li class="nav-item"><a class="nav-link btn btn-outline-info text-info rounded-pill px-3 ms-2" href="/dashboard"><i class="fas fa-layer-group me-1"></i>Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i></a></li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link btn btn-info text-white rounded-pill px-3 ms-2 fw-bold shadow-sm" href="/login"><i class="fab fa-google me-1"></i>Login with Google</a></li>
+          {% endif %}
+        </ul>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
-<!-- Flash messages -->
-<div class="container mt-3">
-  {% with messages = get_flashed_messages(with_categories=true) %}
+  <!-- Flash messages -->
+  <div class="container mt-3">
+    {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-      {% for cat, msg in messages %}
-        <div class="alert alert-{{ cat }} alert-dismissible fade show" role="alert">
-          {{ msg }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-      {% endfor %}
+    {% for cat, msg in messages %}
+    <div class="alert alert-{{ cat }} alert-dismissible fade show" role="alert">
+      {{ msg }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
     {% endif %}
-  {% endwith %}
-</div>
-
-{% block content %}{% endblock %}
-
-<footer class="mt-5 py-4" style="background: #1a1a2e; color: #ccc;">
-  <div class="container text-center">
-    <p class="mb-1"><i class="fas fa-brain text-info me-2"></i><strong class="text-white">SmartJob AI</strong> — Intelligent Job Recommendation System</p>
-    <small>Built with Machine Learning · NLP · Hybrid Filtering · Adaptive Learning</small>
+    {% endwith %}
   </div>
-</footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block content %}{% endblock %}
+
+  <footer class="mt-5 py-4" style="background: #1a1a2e; color: #ccc;">
+    <div class="container text-center">
+      <p class="mb-1">👨‍💻<strong class="text-white">SmartJob AI</strong> —
+        Intelligent Job Recommendation System</p>
+      <small>Built with Machine Learning · NLP · Hybrid Filtering · Adaptive Learning</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
+
 </html>

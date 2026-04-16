@@ -84,7 +84,22 @@ class ResumeParser:
         else:
             with open(filepath, "r", errors="ignore") as f:
                 text = f.read()
-        return self.parse_text(text)
+        
+        profile = self.parse_text(text)
+        
+        if profile.get("name") == "Candidate":
+            # Fallback to file name without extension
+            basename = os.path.basename(filepath)
+            name_from_file = os.path.splitext(basename)[0]
+            # Clean up the filename to look like a name
+            name_from_file = name_from_file.replace("_", " ").replace("-", " ")
+            # Remove common resume words
+            import re as _re
+            name_from_file = _re.sub(r'(?i)\b(resume|cv|profile)\b', '', name_from_file).strip()
+            if name_from_file:
+                profile["name"] = name_from_file.title()
+                
+        return profile
 
     def parse_text(self, text: str) -> dict:
         """Accept raw text and return a structured profile dict."""
@@ -135,11 +150,25 @@ class ResumeParser:
         return m.group(0) if m else ""
 
     def _extract_name(self, text: str) -> str:
-        """Heuristic: first non-empty line that looks like a name."""
+        """Heuristic and NER to extract name."""
+        if SPACY_AVAILABLE:
+            doc = nlp(text[:1000])
+            for ent in doc.ents:
+                if ent.label_ == "PERSON":
+                    cleaned = ent.text.strip()
+                    if cleaned and len(cleaned.split()) >= 1 and len(cleaned) < 40:
+                        if cleaned.lower() not in ["resume", "cv", "curriculum vitae"]:
+                            return cleaned
+
         for line in text.splitlines():
             line = line.strip()
-            if line and len(line.split()) in (2, 3) and line.replace(" ", "").isalpha():
-                return line
+            if not line:
+                continue
+            
+            cleaned_line = line.replace(" ", "").replace(".", "").replace("-", "")
+            if len(line.split()) in (1, 2, 3, 4) and cleaned_line.isalpha() and 2 < len(cleaned_line) < 40:
+                if line.lower() not in ["resume", "cv", "curriculum vitae", "profile"]:
+                    return line
         return "Candidate"
 
     def _generate_summary(self, text: str) -> str:

@@ -1,0 +1,74 @@
+{
+  "user_id": "user_76e1d3f9",
+  "skill_weights": {
+    "java": 0.5,
+    "python": 2.5,
+    "git": 1.0,
+    "agile": 0.5,
+    "sql": 2.0,
+    "react": 0.5,
+    "javascript": 1.0,
+    "html": 0.5,
+    "css": 0.5,
+    "apache spark": 0.5,
+    "kafka": 0.5,
+    "aws": 0.5,
+    "excel": 0.5,
+    "power bi": 0.5,
+    "statistics": 0.5,
+    "machine learning": 0.5,
+    "tensorflow": 0.5,
+    "tableau": 0.5,
+    "developer relations": 0.5,
+    "technical writing": 0.5,
+    "public speaking": 0.5
+  },
+  "category_weights": {
+    "Software Development": 0.5,
+    "Web Development": 0.5,
+    "Data Engineering": 0.5,
+    "Data Analytics": 0.5,
+    "Data Science": 0.5,
+    "DevRel": 0.5
+  },
+  "interactions": [
+    {
+      "job_id": 12,
+      "type": "click",
+      "weight": 0.5,
+      "timestamp": 1776235847.9650698
+    },
+    {
+      "job_id": 3,
+      "type": "click",
+      "weight": 0.5,
+      "timestamp": 1776235850.3935933
+    },
+    {
+      "job_id": 18,
+      "type": "click",
+      "weight": 0.5,
+      "timestamp": 1776235851.6743815
+    },
+    {
+      "job_id": 8,
+      "type": "click",
+      "weight": 0.5,
+      "timestamp": 1776235852.873753
+    },
+    {
+      "job_id": 2,
+      "type": "click",
+      "weight": 0.5,
+      "timestamp": 1776235854.822862
+    },
+    {
+      "job_id": 22,
+      "type": "click",
+      "weight": 0.5,
+      "timestamp": 1776235855.2938228
+    }
+  ],
+  "created_at": 1776229539.1462529,
+  "updated_at": 1776235855.293825
+}

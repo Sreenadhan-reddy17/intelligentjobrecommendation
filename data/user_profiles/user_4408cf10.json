@@ -1,0 +1,29 @@
+{
+  "user_id": "user_4408cf10",
+  "skill_weights": {
+    "python": 3.5,
+    "machine learning": 3.5,
+    "tensorflow": 3.5,
+    "sql": 3.5,
+    "tableau": 3.5
+  },
+  "category_weights": {
+    "Data Science": 3.5
+  },
+  "interactions": [
+    {
+      "job_id": 2,
+      "type": "apply",
+      "weight": 3.0,
+      "timestamp": 1772532122.194907
+    },
+    {
+      "job_id": 2,
+      "type": "click",
+      "weight": 0.5,
+      "timestamp": 1772532123.2888525
+    }
+  ],
+  "created_at": 1772529318.13199,
+  "updated_at": 1772532123.2888525
+}

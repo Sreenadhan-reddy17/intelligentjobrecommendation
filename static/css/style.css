@@ -98,6 +98,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; }
   font-size: 8px;
   font-weight: 700;
   transform: rotate(90deg);
+  transform-origin: 18px 18px;
   text-anchor: middle;
   dominant-baseline: middle;
 }

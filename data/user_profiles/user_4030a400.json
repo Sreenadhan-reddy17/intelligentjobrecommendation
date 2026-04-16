@@ -1,0 +1,41 @@
+{
+  "user_id": "user_4030a400",
+  "skill_weights": {
+    "react": 7.0,
+    "javascript": 7.0,
+    "html": 7.0,
+    "css": 7.0,
+    "git": 7.0
+  },
+  "category_weights": {
+    "Web Development": 7.0
+  },
+  "interactions": [
+    {
+      "job_id": 3,
+      "type": "apply",
+      "weight": 3.0,
+      "timestamp": 1775985811.130252
+    },
+    {
+      "job_id": 3,
+      "type": "click",
+      "weight": 0.5,
+      "timestamp": 1775985894.8219337
+    },
+    {
+      "job_id": 3,
+      "type": "apply",
+      "weight": 3.0,
+      "timestamp": 1775988648.9516637
+    },
+    {
+      "job_id": 3,
+      "type": "click",
+      "weight": 0.5,
+      "timestamp": 1775988651.1300795
+    }
+  ],
+  "created_at": 1775979485.2153597,
+  "updated_at": 1775988651.1300845
+}

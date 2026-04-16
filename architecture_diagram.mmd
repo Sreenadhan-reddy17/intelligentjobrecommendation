@@ -1,0 +1,57 @@
+flowchart TD
+    %% Define Layers
+    subgraph Frontend [Frontend / Web Interface]
+        JS[Job Seeker UI]
+        RP[Recruiter UI]
+    end
+
+    subgraph Controller [Flask App Backend]
+        app[app.py (Routes & Session)]
+    end
+
+    subgraph Data Processing [Data Extraction & Features]
+        parser[Resume Parser\n(PDF, DOCX, TXT)]
+        feat_eng[Feature Engineering\n(Sentence Transformers)]
+    end
+
+    subgraph ML Pipeline [Recommendation Engine Pipeline]
+        cb[Content-Based Filter\n(Cosine Similarity)]
+        cf[Collaborative Filter\n(User Interactions)]
+        al[Adaptive Learner\n(Real-time Bias)]
+        hyb[Hybrid Recommender\n(Score Ensembling)]
+        rank[Ranking Model\n(Gradient Boosting)]
+        gap[Skill Gap Analyzer\n(Insights)]
+    end
+
+    subgraph Storage [File & Data Storage]
+        uploads[(Uploads Folder)]
+        csv[(CSV Databases\njobs.csv, interactions.csv)]
+        models[(Pre-trained Models)]
+    end
+
+    %% Flow logic
+    JS -->|Uploads Resume / Text| app
+    RP -->|Uploads Resumes + Job ID| app
+    app --> uploads
+    app --> parser
+    
+    parser -->|Raw Text & Skills| feat_eng
+    csv -.->|Job Descriptions| feat_eng
+    models -.->|all-MiniLM-L6-v2| feat_eng
+    
+    feat_eng -->|Embeddings| cb
+    cb --> hyb
+    
+    csv -.->|Past Clicks/Applies| cf
+    cf --> hyb
+    
+    app -->|Session Events| al
+    al --> hyb
+    
+    hyb -->|Ensembled Scores| rank
+    rank -->|Predict Probabilities| gap
+    gap -->|Missing Skills| app
+    rank -->|Ordered Jobs| app
+    
+    app -->|JSON / Rendered HTML| JS
+    app -->|Ranked Candidates| RP

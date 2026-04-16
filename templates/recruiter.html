@@ -1,0 +1,281 @@
+{% extends "base.html" %}
+
+{% block title %}Recruiter Portal - SmartJob AI{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row mb-4">
+    <div class="col-12 text-center text-md-start">
+      <h2 class="fw-bold"><i class="fas fa-user-tie text-info me-2"></i>Recruiter Portal</h2>
+      <p class="text-muted">Upload candidate resumes and rank them against your job requirements.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Configuration Form -->
+    <div class="col-lg-5 mb-4">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body p-4">
+          <h5 class="fw-bold mb-4"><i class="fas fa-upload me-2 text-primary"></i>Setup Scan</h5>
+          <form action="/recruiter" method="POST" enctype="multipart/form-data" id="recruiterForm">
+
+            <div class="mb-4">
+              <label class="form-label fw-bold">1. Upload Resumes (50-70 max)</label>
+
+              <!-- Hidden form input that actually submits the files -->
+              <input type="file" name="resumes" id="mainFileInput" multiple accept=".pdf,.doc,.docx,.txt"
+                style="display: none;" required>
+
+              <!-- Proxy input used to trigger the file dialog -->
+              <input type="file" id="proxyInput" multiple accept=".pdf,.doc,.docx,.txt" style="display: none;">
+
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-primary flex-grow-1 fw-bold" id="btnChooseFiles">
+                  <i class="fas fa-folder-open me-2"></i>Choose Files
+                </button>
+                <button type="button" class="btn btn-outline-secondary flex-grow-1 fw-bold" id="btnAddFiles">
+                  <i class="fas fa-plus me-2"></i>Add Files
+                </button>
+              </div>
+              <div class="mt-2 text-center py-2 bg-light border rounded text-muted fw-bold small" id="fileCountDisplay">
+                0 files selected
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-bold">2. Target Job Role</label>
+              <select name="job_id" class="form-select mb-2" id="jobSelect" required>
+                <option value="" disabled selected>Select from existing jobs...</option>
+                {% for j in jobs %}
+                <option value="{{ j.job_id }}">{{ j.title }}</option>
+                {% endfor %}
+                <option value="custom">-- Custom Job Requirement --</option>
+              </select>
+
+              <div class="mt-2 d-none" id="customJobDiv">
+                <textarea class="form-control" name="custom_job" rows="3"
+                  placeholder="Paste job description, expected skills, etc."></textarea>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-bold">3. Top N Candidates to Hire</label>
+              <input type="number" name="top_n" class="form-control" min="1" max="100" value="5" required>
+              <small class="text-muted">Will filter to the top N matches.</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">
+              <i class="fas fa-search me-2"></i>Scan & Rank Candidates
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="col-lg-7 mb-4" id="resultsContainer">
+      <div class="card shadow-sm border-0 h-100 bg-light">
+        <div class="card-body p-4">
+          <h5 class="fw-bold mb-4"><i class="fas fa-trophy me-2 text-warning"></i>Top Ranked Candidates</h5>
+
+          {% if candidates %}
+          <div class="list-group">
+            {% for cand in candidates %}
+            {% if cand.is_valid == False %}
+            <div
+              class="list-group-item list-group-item-action d-flex flex-column flex-md-row justify-content-between align-items-md-center p-3 mb-2 shadow-sm rounded border border-danger">
+              <div class="mb-2 mb-md-0">
+                <h5 class="mb-1 fw-bold text-danger">
+                  <i class="fas fa-exclamation-triangle me-2"></i>Not a Resume
+                </h5>
+                <p class="mb-1 text-muted">
+                  provided file is not a resume, please upload a resume to get Ranking score
+                </p>
+              </div>
+              <div class="text-md-end">
+                <span class="text-muted small d-block mb-2">{{ cand.filename }}</span>
+              </div>
+            </div>
+            {% else %}
+            <div
+              class="list-group-item list-group-item-action d-flex flex-column flex-md-row justify-content-between align-items-md-center p-3 mb-2 shadow-sm rounded border-0">
+              <div class="mb-2 mb-md-0">
+                <h5 class="mb-1 fw-bold text-primary">
+                  <i class="fas fa-user-circle me-2"></i>{{ cand.name }}
+                  <span
+                    class="badge bg-{{ 'success' if cand.score >= 70 else 'warning' if cand.score >= 40 else 'danger' }} ms-2 rounded-pill">
+                    {{ cand.score }}% Match
+                  </span>
+                </h5>
+                <p class="mb-1 small text-muted">
+                  <i class="fas fa-envelope me-1"></i>{{ cand.email }} &bull;
+                  <i class="fas fa-phone me-1"></i>{{ cand.phone }}
+                </p>
+                <p class="mb-1 small"><strong>Exp:</strong> {{ cand.experience }} years</p>
+                <div>
+                  {% for skill in cand.skills[:5] %}
+                  <span class="badge bg-secondary me-1">{{ skill }}</span>
+                  {% endfor %}
+                  {% if cand.skills|length > 5 %}
+                  <span class="badge bg-light text-dark border" style="cursor: pointer;"
+                    onclick="this.nextElementSibling.style.display='inline'; this.style.display='none';">+{{
+                    cand.skills|length - 5 }} more</span>
+                  <span style="display: none;">
+                    {% for skill in cand.skills[5:] %}
+                    <span class="badge bg-secondary me-1">{{ skill }}</span>
+                    {% endfor %}
+                  </span>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="text-md-end">
+                <span class="text-muted small d-block mb-2">{{ cand.filename }}</span>
+              </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+          </div>
+          {% else %}
+          <div class="text-center py-5 text-muted">
+            <i class="fas fa-users fa-4x mb-3 text-secondary opacity-50"></i>
+            <h5>No results yet</h5>
+            <p>Upload resumes and run the scan to see ranked candidates here.</p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('jobSelect').addEventListener('change', function () {
+    if (this.value === 'custom') {
+      document.getElementById('customJobDiv').classList.remove('d-none');
+      document.querySelector('textarea[name="custom_job"]').required = true;
+    } else {
+      document.getElementById('customJobDiv').classList.add('d-none');
+      document.querySelector('textarea[name="custom_job"]').required = false;
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const alerts = document.querySelectorAll('.alert');
+    let invalidMessages = [];
+    alerts.forEach(alertEl => {
+      if (alertEl.innerText.includes('is not a resume/CV')) {
+        alertEl.style.display = 'none';
+        invalidMessages.push(alertEl.innerText.trim());
+      }
+    });
+    if (invalidMessages.length > 0) {
+      window.alert(invalidMessages.join('\n'));
+    }
+  });
+
+  const mainFileInput = document.getElementById('mainFileInput');
+  if (mainFileInput) {
+    const dt = new DataTransfer();
+    let uploadMode = 'choose';
+    const fileCountDisplay = document.getElementById('fileCountDisplay');
+
+    const proxyInput = document.getElementById('proxyInput');
+
+    proxyInput.addEventListener('change', function (e) {
+      if (uploadMode === 'choose') {
+        dt.items.clear();
+      }
+
+      for (let i = 0; i < this.files.length; i++) {
+        let exists = false;
+        for (let j = 0; j < dt.items.length; j++) {
+          if (dt.items[j].getAsFile().name === this.files[i].name && dt.items[j].getAsFile().size === this.files[i].size) {
+            exists = true;
+            break;
+          }
+        }
+        if (!exists) {
+          dt.items.add(this.files[i]);
+        }
+      }
+      mainFileInput.files = dt.files;
+
+      let count = dt.files.length;
+      if (count > 0) {
+        fileCountDisplay.innerHTML = `<span class="text-success">${count} file(s) selected</span>`;
+      } else {
+        fileCountDisplay.innerHTML = '0 files selected';
+      }
+
+      // Reset proxy so input triggered again on SAME file doesn't block 'change' event
+      proxyInput.value = '';
+    });
+
+    const btnChoose = document.getElementById('btnChooseFiles');
+    if (btnChoose) {
+      btnChoose.addEventListener('click', () => {
+        uploadMode = 'choose';
+        proxyInput.click();
+      });
+    }
+
+    const btnAdd = document.getElementById('btnAddFiles');
+    if (btnAdd) {
+      btnAdd.addEventListener('click', () => {
+        uploadMode = 'add';
+        proxyInput.click();
+      });
+    }
+  }
+
+  const recruiterForm = document.getElementById('recruiterForm');
+  if (recruiterForm) {
+    recruiterForm.addEventListener('submit', function (e) {
+      if (mainFileInput.files.length === 0) {
+        e.preventDefault();
+        alert("Please upload at least one resume before ranking candidates.");
+        return;
+      }
+
+      e.preventDefault();
+      const formData = new FormData(this);
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalBtnHTML = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Scanning...';
+      submitBtn.disabled = true;
+
+      fetch('/recruiter', {
+        method: 'POST',
+        body: formData
+      })
+        .then(response => response.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          const newResults = doc.getElementById('resultsContainer');
+          if (newResults) {
+            document.getElementById('resultsContainer').innerHTML = newResults.innerHTML;
+          }
+
+          const invalidMessages = [];
+          doc.querySelectorAll('.alert').forEach(alertEl => {
+            if (alertEl.innerText.includes('is not a resume/CV')) {
+              invalidMessages.push(alertEl.innerText.trim());
+            }
+          });
+          if (invalidMessages.length > 0) {
+            window.alert(invalidMessages.join('\\n'));
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          alert("An error occurred while scanning candidates.");
+        })
+        .finally(() => {
+          submitBtn.innerHTML = originalBtnHTML;
+          submitBtn.disabled = false;
+        });
+    });
+  }
+</script>
+{% endblock %}
