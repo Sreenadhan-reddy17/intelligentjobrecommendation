@@ -21,6 +21,9 @@ RUN mkdir -p uploads models data/user_profiles
 # Expose port
 EXPOSE 5000
 
+# Pre-download the SentenceTransformer model to prevent downloading on startup
+RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('all-MiniLM-L6-v2')"
+
 # ── Environment ───────────────────────────────────────────────────────────────
 ENV FLASK_ENV=production
 ENV SECRET_KEY=change-this-in-production
