@@ -9,6 +9,10 @@ import numpy as np
 import os
 from sentence_transformers import SentenceTransformer
 from sklearn.preprocessing import MinMaxScaler
+import torch
+
+# Strictly limit PyTorch threads to prevent memory spikes on free tier hosting
+torch.set_num_threads(1)
 
 
 class FeatureEngineer:
